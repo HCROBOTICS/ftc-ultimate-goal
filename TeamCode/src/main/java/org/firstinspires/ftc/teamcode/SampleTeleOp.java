@@ -9,7 +9,7 @@ public class SampleTeleOp extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         waitForStart();
 
-        telemetry.addData("", "hello, world");
+        telemetry.addData("", "yello, world");
         telemetry.update();
 
         while (opModeIsActive());
