@@ -21,23 +21,25 @@ public class SampleTeleOp extends LinearOpMode {
 
         /* TODO: fix these wrong lines */
         lf = hardwareMap.dcMotor.get("lf");
-        rf = hardwareMap.dcMotor.get("lb");
-        lb = hardwareMap.dcMotor.get("rf");
+        rf = hardwareMap.dcMotor.get("rf");
+        lb = hardwareMap.dcMotor.get("lb");
         rb = hardwareMap.dcMotor.get("rb");
 
         lf.setDirection(DcMotor.Direction.REVERSE);
-        rf.setDirection(DcMotor.Direction.REVERSE);
-        lb.setDirection(DcMotor.Direction.FORWARD);
+        rf.setDirection(DcMotor.Direction.FORWARD);
+        lb.setDirection(DcMotor.Direction.REVERSE);
         rb.setDirection(DcMotor.Direction.FORWARD);
 
-        {
-            /* lf.setPower(-gamepad1.left_stick_y - gamepad1.right_stick_x - gamepad1.left_stick_x);
-            rf.setPower(-gamepad1.left_stick_y + gamepad1.right_stick_x + gamepad1.left_stick_x);
+        while (opModeIsActive()) {
+
+
+            lf.setPower(-gamepad1.left_stick_y + gamepad1.right_stick_x - gamepad1.left_stick_x);
+            rf.setPower(-gamepad1.left_stick_y - gamepad1.right_stick_x + gamepad1.left_stick_x);
             lb.setPower(-gamepad1.left_stick_y + gamepad1.right_stick_x + gamepad1.left_stick_x);
             rb.setPower(-gamepad1.left_stick_y - gamepad1.right_stick_x - gamepad1.left_stick_x);
-            */
 
-            forwards(1);
+
+            /*forwards(1);
             sleep(1000);
             forwards(0);
             sleep(1000);
@@ -45,7 +47,7 @@ public class SampleTeleOp extends LinearOpMode {
             sleep(1000);
             forwards(0);
 
-            telemetry.update();
+            telemetry.update();*/
         }
     }
 
