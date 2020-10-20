@@ -19,7 +19,7 @@ public class SampleTeleOp extends LinearOpMode {
         telemetry.addData("", "yello, world");
         telemetry.update();
 
-        /* TODO: fix these wrong lines */
+        /* TODO: fix these wrong lines  Done*/
         lf = hardwareMap.dcMotor.get("lf");
         rf = hardwareMap.dcMotor.get("rf");
         lb = hardwareMap.dcMotor.get("lb");
@@ -39,15 +39,7 @@ public class SampleTeleOp extends LinearOpMode {
             rb.setPower(-gamepad1.left_stick_y - gamepad1.right_stick_x - gamepad1.left_stick_x);
 
 
-            /*forwards(1);
-            sleep(1000);
-            forwards(0);
-            sleep(1000);
-            forwards(-1);
-            sleep(1000);
-            forwards(0);
 
-            telemetry.update();*/
         }
     }
 
