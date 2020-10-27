@@ -12,6 +12,10 @@ public class SampleTeleOp extends LinearOpMode {
     DcMotor lb;
     DcMotor rb;
 
+    DcMotor llaunch;
+    DcMotor rlaunch;
+    DcMotor pull;
+
     @Override
     public void runOpMode() throws InterruptedException {
         waitForStart();
@@ -19,7 +23,7 @@ public class SampleTeleOp extends LinearOpMode {
         telemetry.addData("", "yello, world");
         telemetry.update();
 
-        /* TODO: fix these wrong lines  Done*/
+
         lf = hardwareMap.dcMotor.get("lf");
         rf = hardwareMap.dcMotor.get("rf");
         lb = hardwareMap.dcMotor.get("lb");
@@ -30,6 +34,17 @@ public class SampleTeleOp extends LinearOpMode {
         lb.setDirection(DcMotor.Direction.REVERSE);
         rb.setDirection(DcMotor.Direction.FORWARD);
 
+        // For the Launcher
+
+        llaunch = hardwareMap.dcMotor.get("llaunch");
+        rlaunch = hardwareMap.dcMotor.get("rlaunch");
+        pull = hardwareMap.dcMotor.get("pull");
+
+        // TODO: when builders figure out what direction motors are on.
+        llaunch.setDirection(DcMotor.Direction.FORWARD);
+        rlaunch.setDirection(DcMotor.Direction.FORWARD);
+        pull.setDirection(DcMotor.Direction.FORWARD);
+
         while (opModeIsActive()) {
 
 
@@ -39,8 +54,13 @@ public class SampleTeleOp extends LinearOpMode {
             rb.setPower(-gamepad1.left_stick_y - gamepad1.right_stick_x - gamepad1.left_stick_x);
 
 
+            llaunch.setPower(gamepad1.right_trigger);
+            rlaunch.setPower(gamepad1.right_trigger);
+            pull.setPower(gamepad1.left_trigger);
 
         }
+
+
     }
 
     void forwards(float power) {
