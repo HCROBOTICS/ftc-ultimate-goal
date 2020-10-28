@@ -69,4 +69,25 @@ public class SampleTeleOp extends LinearOpMode {
         lb.setPower(power);
         rb.setPower(power);
     }
+
+    void righturn(float power) {
+
+        lf.setPower(power);
+        rf.setPower(-power);
+        lb.setPower(power);
+        rb.setPower(power);
+
+    }
+
+    void lefturn(float power) {
+
+        lf.setPower(-power);
+        rf.setPower(power);
+        lb.setPower(-power);
+        rb.setPower(power);
+
+    }
+
+
 }
+
