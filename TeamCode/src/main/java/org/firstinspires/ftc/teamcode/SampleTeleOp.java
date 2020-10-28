@@ -20,7 +20,7 @@ public class SampleTeleOp extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         waitForStart();
 
-        telemetry.addData("", "yello, world");
+        telemetry.addData("", " The Code does not work");
         telemetry.update();
 
 
