@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp(name = "tele op", group = "yeah")
 public class SampleTeleOp extends LinearOpMode {
@@ -15,6 +16,10 @@ public class SampleTeleOp extends LinearOpMode {
     DcMotor llaunch;
     DcMotor rlaunch;
     DcMotor pull;
+
+    // Unused for now
+    //DcMotor extendo;
+    //Servo grabber;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -45,6 +50,14 @@ public class SampleTeleOp extends LinearOpMode {
         rlaunch.setDirection(DcMotor.Direction.FORWARD);
         pull.setDirection(DcMotor.Direction.FORWARD);
 
+        llaunch.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rlaunch.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+/*
+        This is unused for now, just for later just in case
+        extendo = hardwareMap.dcMotor.get("ext");
+        grabber = hardwareMap.servo.get("grab");
+        */
+
         while (opModeIsActive()) {
 
 
@@ -57,6 +70,8 @@ public class SampleTeleOp extends LinearOpMode {
             llaunch.setPower(gamepad1.right_trigger);
             rlaunch.setPower(gamepad1.right_trigger);
             pull.setPower(gamepad1.left_trigger);
+
+
 
         }
 
