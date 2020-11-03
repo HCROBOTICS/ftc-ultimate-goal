@@ -90,7 +90,7 @@ public class SampleTeleOp extends LinearOpMode {
         lf.setPower(power);
         rf.setPower(-power);
         lb.setPower(power);
-        rb.setPower(power);
+        rb.setPower(-power);
 
     }
 
