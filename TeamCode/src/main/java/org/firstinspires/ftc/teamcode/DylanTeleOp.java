@@ -42,6 +42,7 @@ public class DylanTeleOp extends LinearOpMode {
         lb.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rb.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+
         gripper = hardwareMap.servo.get("gripper");
         dylanRotate = hardwareMap.dcMotor.get("leftlift");
         dylanRotate.setDirection(DcMotor.Direction.FORWARD);

@@ -85,6 +85,11 @@ public class Auto<rf> extends LinearOpMode {
         lb = hardwareMap.dcMotor.get("lb");
         rb = hardwareMap.dcMotor.get("rb");
 
+        lf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        lb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
         if (tfod != null) {
             tfod.activate();
         }
@@ -106,6 +111,13 @@ public class Auto<rf> extends LinearOpMode {
         if (tfod != null) {
             tfod.shutdown();
         }
+
+        if (opModeIsActive()) {
+            forwards(1);
+            sleep(1000);
+           stop();
+        }
+
     }
 
     public TfodView tfodLook() {
@@ -181,5 +193,12 @@ public class Auto<rf> extends LinearOpMode {
         rf.setPower(power);
         lb.setPower(-power);
         rb.setPower(power);
+    }
+
+    void stopmotor(float power) {
+        lf.setPower(0);
+        rf.setPower(0);
+        lb.setPower(0);
+        rb.setPower(0);
     }
 }
