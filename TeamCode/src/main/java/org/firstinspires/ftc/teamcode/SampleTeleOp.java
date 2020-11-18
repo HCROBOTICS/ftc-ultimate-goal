@@ -19,9 +19,10 @@ public class SampleTeleOp extends LinearOpMode {
 
     DcMotor llaunch;
     DcMotor rlaunch;
-    DcMotor pull1;
-    DcMotor dylanRotate;
-    Servo gripper;
+    DcMotor convey;
+    //DcMotor dylanRotate;
+    //Servo gripper;
+
 
     // Unused for now
     //DcMotor extendo;
@@ -49,17 +50,17 @@ public class SampleTeleOp extends LinearOpMode {
 
         // For the Launcher
 
-        llaunch = hardwareMap.dcMotor.get("leftpivot");
-        rlaunch = hardwareMap.dcMotor.get("rightpivot");
-        pull1 = hardwareMap.dcMotor.get("rightlift");
-        gripper = hardwareMap.servo.get("gripper");
-        dylanRotate = hardwareMap.dcMotor.get("leftlift")
+        llaunch = hardwareMap.dcMotor.get("llaunch");
+        rlaunch = hardwareMap.dcMotor.get("rlaunch");
+        convey = hardwareMap.dcMotor.get("convey");
+        //gripper = hardwareMap.servo.get("gripper");
+        //dylanRotate = hardwareMap.dcMotor.get("leftlift");
 
         // TODO: when builders figure out what direction motors are on.
         llaunch.setDirection(DcMotor.Direction.FORWARD);
         rlaunch.setDirection(DcMotor.Direction.FORWARD);
-        pull1.setDirection(DcMotor.Direction.FORWARD);
-        dylanRotate.setDirection(DcMotor.Direction.FORWARD)
+        convey.setDirection(DcMotor.Direction.REVERSE);
+        //dylanRotate.setDirection(DcMotor.Direction.FORWARD);
 
         llaunch.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rlaunch.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -88,12 +89,12 @@ public class SampleTeleOp extends LinearOpMode {
             rf.setPower(-gamepad1.left_stick_y - gamepad1.right_stick_x + gamepad1.left_stick_x);
             lb.setPower(-gamepad1.left_stick_y + gamepad1.right_stick_x + gamepad1.left_stick_x);
             rb.setPower(-gamepad1.left_stick_y - gamepad1.right_stick_x - gamepad1.left_stick_x);
-            gripper.setPosition(gamepad1.left_trigger != 0? 1 : 0);
+            //gripper.setPosition(gamepad1.left_trigger != 0? 1 : 0);
 
-
-            llaunch.setPower((gamepad2.right_trigger));
-            rlaunch.setPower(gamepad2.right_trigger);
-            pull1.setPower(gamepad2.left_trigger);
+            double launch = gamepad2.right_trigger;
+            llaunch.setPower(launch);
+            rlaunch.setPower(launch);
+            convey.setPower(gamepad2.left_trigger);
 
         }
     }
