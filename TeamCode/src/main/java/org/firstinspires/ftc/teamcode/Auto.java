@@ -90,6 +90,9 @@ public class Auto extends LinearOpMode {
         lb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+        rf.setDirection(DcMotor.Direction.REVERSE);
+        rb.setDirection(DcMotor.Direction.REVERSE);
+
         /* if (tfod != null) {
             tfod.activate();
         } */
@@ -98,14 +101,13 @@ public class Auto extends LinearOpMode {
         telemetry.update();
         waitForStart();
 
-
         if (opModeIsActive()) {
             /* while (opModeIsActive()) {
                 tfodLook();
             } */
 
             forwards(.5);
-            sleep(1000);
+            sleep(3250);
             stopMotors();
         }
 
