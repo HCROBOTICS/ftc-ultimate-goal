@@ -77,8 +77,8 @@ public class Auto extends LinearOpMode {
     public void runOpMode() {
         // The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
         // first.
-        initVuforia();
-        initTfod();
+        /* initVuforia();
+        initTfod(); */
 
         lf = hardwareMap.dcMotor.get("lf");
         rf = hardwareMap.dcMotor.get("rf");
@@ -90,9 +90,9 @@ public class Auto extends LinearOpMode {
         lb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        if (tfod != null) {
+        /* if (tfod != null) {
             tfod.activate();
-        }
+        } */
 
         telemetry.addData(">", "Press Play to start op mode");
         telemetry.update();
@@ -100,24 +100,18 @@ public class Auto extends LinearOpMode {
 
 
         if (opModeIsActive()) {
-            int i = 0;
-
-
-            while (opModeIsActive()) {
+            /* while (opModeIsActive()) {
                 tfodLook();
-            }
-        }
+            } */
 
-        if (tfod != null) {
-            tfod.shutdown();
-        }
-
-        if (opModeIsActive()) {
-            forwards(1);
+            forwards(.5);
             sleep(1000);
-           stop();
+            stopMotors();
         }
 
+        /* if (tfod != null) {
+            tfod.shutdown();
+        } */
     }
 
     public TfodView tfodLook() {
@@ -174,28 +168,28 @@ public class Auto extends LinearOpMode {
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
     }
 
-    void forwards(float power) {
+    void forwards(double power) {
         lf.setPower(power);
         rf.setPower(power);
         lb.setPower(power);
         rb.setPower(power);
     }
 
-    void turnRight(float power) {
+    void turnRight(double power) {
         lf.setPower(power);
         rf.setPower(-power);
         lb.setPower(power);
         rb.setPower(-power);
     }
 
-    void turnLeft(float power) {
+    void turnLeft(double power) {
         lf.setPower(-power);
         rf.setPower(power);
         lb.setPower(-power);
         rb.setPower(power);
     }
 
-    void stopmotor(float power) {
+    void stopMotors() {
         lf.setPower(0);
         rf.setPower(0);
         lb.setPower(0);
