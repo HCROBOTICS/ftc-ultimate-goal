@@ -4,6 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+
 
 @TeleOp(name = "tele op", group = "yeah")
 public class SampleTeleOp extends LinearOpMode {
@@ -20,9 +22,9 @@ public class SampleTeleOp extends LinearOpMode {
     DcMotor llaunch;
     DcMotor rlaunch;
     DcMotor convey;
-    //DcMotor dylanRotate;
-    //Servo gripper;
-
+    DcMotorSimple windmill;
+    DcMotorSimple gripper;
+    DcMotorSimple ramp;
 
     // Unused for now
     //DcMotor extendo;
@@ -53,14 +55,16 @@ public class SampleTeleOp extends LinearOpMode {
         llaunch = hardwareMap.dcMotor.get("llaunch");
         rlaunch = hardwareMap.dcMotor.get("rlaunch");
         convey = hardwareMap.dcMotor.get("convey");
-        //gripper = hardwareMap.servo.get("gripper");
-        //dylanRotate = hardwareMap.dcMotor.get("leftlift");
+        gripper = hardwareMap.dcMotor.get("gripper");
+        ramp = hardwareMap.dcMotor.get("ramp");
+        windmill = hardwareMap.dcMotor.get("windmill");
 
         // TODO: when builders figure out what direction motors are on.
         llaunch.setDirection(DcMotor.Direction.FORWARD);
         rlaunch.setDirection(DcMotor.Direction.FORWARD);
         convey.setDirection(DcMotor.Direction.REVERSE);
-        //dylanRotate.setDirection(DcMotor.Direction.FORWARD);
+        ramp.setDirection(DcMotorSimple.Direction.FORWARD);
+        windmill.setDirection(DcMotorSimple.Direction.FORWARD);
 
         llaunch.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rlaunch.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
