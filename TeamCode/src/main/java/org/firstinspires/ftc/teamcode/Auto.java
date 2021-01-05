@@ -73,6 +73,10 @@ public class Auto extends LinearOpMode {
     DcMotor lb;
     DcMotor rb;
 
+    DcMotor llaunch;
+    DcMotor rlaunch;
+    DcMotor convey;
+
     @Override
     public void runOpMode() {
         // The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
@@ -84,11 +88,16 @@ public class Auto extends LinearOpMode {
         rf = hardwareMap.dcMotor.get("rf");
         lb = hardwareMap.dcMotor.get("lb");
         rb = hardwareMap.dcMotor.get("rb");
+        llaunch = hardwareMap.dcMotor.get("llaunch");
+        rlaunch = hardwareMap.dcMotor.get("rlaunch");
+        convey = hardwareMap.dcMotor.get("convey");
 
         lf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         lb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        llaunch.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rlaunch.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         rf.setDirection(DcMotor.Direction.REVERSE);
         rb.setDirection(DcMotor.Direction.REVERSE);
@@ -106,9 +115,21 @@ public class Auto extends LinearOpMode {
                 tfodLook();
             } */
 
+            /* drive up to the line */
             forwards(.5);
             sleep(3250);
             stopMotors();
+
+            /* spin up the launcher */
+            powerLaunch(1);
+            sleep(3000);
+            /* spin up the conveyor thing */
+            powerConvey(1);
+            sleep(5000);
+
+            /* stop everything */
+            powerLaunch(0);
+            powerConvey(0);
         }
 
         /* if (tfod != null) {
@@ -196,5 +217,14 @@ public class Auto extends LinearOpMode {
         rf.setPower(0);
         lb.setPower(0);
         rb.setPower(0);
+    }
+
+    void powerLaunch(double power) {
+        llaunch.setPower(power);
+        rlaunch.setPower(power);
+    }
+
+    void powerConvey(double power) {
+        convey.setPower(power);
     }
 }
