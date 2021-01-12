@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -22,9 +23,10 @@ public class SampleTeleOp extends LinearOpMode {
     DcMotor llaunch;
     DcMotor rlaunch;
     DcMotor convey;
-    DcMotorSimple windmill;
-    DcMotorSimple gripper;
-    DcMotorSimple ramp;
+    CRServo LinearSlide;
+    CRServo arm;
+    Servo gripper;
+    Servo ramp;
 
     // Unused for now
     //DcMotor extendo;
@@ -50,21 +52,23 @@ public class SampleTeleOp extends LinearOpMode {
         lb.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rb.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        // For the Launcher
+        // For the Launcher and the conveyor assembley
 
         llaunch = hardwareMap.dcMotor.get("llaunch");
         rlaunch = hardwareMap.dcMotor.get("rlaunch");
         convey = hardwareMap.dcMotor.get("convey");
-        gripper = hardwareMap.dcMotor.get("gripper");
-        ramp = hardwareMap.dcMotor.get("ramp");
-        windmill = hardwareMap.dcMotor.get("windmill");
+        gripper = hardwareMap.servo.get("gripper");
+        ramp = hardwareMap.servo.get("ramp");
+        LinearSlide = hardwareMap.crservo.get("windmill");
+        arm = hardwareMap.crservo.get("arm");
 
-        // TODO: when builders figure out what direction motors are on.
+        // TODO:z when builders figure out what direction motors are on.
         llaunch.setDirection(DcMotor.Direction.FORWARD);
         rlaunch.setDirection(DcMotor.Direction.FORWARD);
         convey.setDirection(DcMotor.Direction.REVERSE);
-        ramp.setDirection(DcMotorSimple.Direction.FORWARD);
-        windmill.setDirection(DcMotorSimple.Direction.FORWARD);
+        arm.setDirection(DcMotor.Direction.REVERSE);
+        LinearSlide.setDirection(DcMotorSimple.Direction.FORWARD);
+
 
         llaunch.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rlaunch.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -98,7 +102,15 @@ public class SampleTeleOp extends LinearOpMode {
             double launch = gamepad2.right_trigger;
             llaunch.setPower(launch);
             rlaunch.setPower(launch);
+
             convey.setPower(gamepad2.left_trigger);
+            LinearSlide.setPower(gamepad2.left_trigger);
+            arm.setPower(gamepad2.right_stick_x);
+
+            // TODO: add if statements to constrain these things
+            gripper.setPosition(1);
+            ramp.setPosition(1);
+
 
         }
     }
