@@ -29,6 +29,7 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import java.util.List;
@@ -42,7 +43,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 
-@TeleOp(name = "Autonomous", group = "yep")
+@Autonomous(name = "Autonomous", group = "yep")
 public class Auto extends LinearOpMode {
     private static final String TFOD_MODEL_ASSET = "UltimateGoal.tflite";
     private static final String LABEL_FIRST_ELEMENT = "Quad";
@@ -64,7 +65,6 @@ public class Auto extends LinearOpMode {
             "FAbh5kGzx8gGE+jQOAh9fVzy3rDLgQ/HQNszX7Iqwnnh/w836FuXrBbajfDun3qUQkCQKEJuaFyUEwEyZPZ+" +
             "cRDym2WJigiXsw724H0pv050q0N67W+No/keaLi2mZVMuySZijkNjnsnhKrBCerryW9MJQ";
 
-
     private VuforiaLocalizer vuforia;
     private TFObjectDetector tfod;
 
@@ -81,10 +81,10 @@ public class Auto extends LinearOpMode {
     public void runOpMode() {
         // The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
         // first.
-        /* initVuforia();
-        initTfod(); */
+        initVuforia();
+        initTfod();
 
-        lf = hardwareMap.dcMotor.get("lf");
+        /* lf = hardwareMap.dcMotor.get("lf");
         rf = hardwareMap.dcMotor.get("rf");
         lb = hardwareMap.dcMotor.get("lb");
         rb = hardwareMap.dcMotor.get("rb");
@@ -100,41 +100,44 @@ public class Auto extends LinearOpMode {
         rlaunch.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         rf.setDirection(DcMotor.Direction.REVERSE);
-        rb.setDirection(DcMotor.Direction.REVERSE);
+        rb.setDirection(DcMotor.Direction.REVERSE); */
 
-        /* if (tfod != null) {
+        if (tfod != null) {
             tfod.activate();
-        } */
+        }
 
         telemetry.addData(">", "Press Play to start op mode");
         telemetry.update();
         waitForStart();
 
         if (opModeIsActive()) {
-            /* while (opModeIsActive()) {
+            while (opModeIsActive()) {
+                /*telemetry.addData("I see", tfodLook().label);
+                telemetry.update();*/
                 tfodLook();
-            } */
+            }
 
-            /* drive up to the line */
+            /*
+            // drive up to the line
             forwards(.5);
             sleep(3250);
             stopMotors();
 
-            /* spin up the launcher */
+            // spin up the launcher
             powerLaunch(1);
             sleep(3000);
-            /* spin up the conveyor thing */
+            // spin up the conveyor thing
             powerConvey(1);
             sleep(5000);
 
-            /* stop everything */
+            // stop everything
             powerLaunch(0);
-            powerConvey(0);
+            powerConvey(0); */
         }
 
-        /* if (tfod != null) {
+        if (tfod != null) {
             tfod.shutdown();
-        } */
+        }
     }
 
     public TfodView tfodLook() {
@@ -142,17 +145,17 @@ public class Auto extends LinearOpMode {
 
         if (tfod != null) {
             List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-            if (updatedRecognitions != null && !updatedRecognitions.isEmpty()) {
+            if (updatedRecognitions != null) {
+                telemetry.addData("asdf","jkl;");
+                telemetry.update();
                 telemetry.addData("# Object Detected", updatedRecognitions.size());
-                // step through the list of recognitions and display boundary info.
-                int i = 0;
 
-                recognition = updatedRecognitions.get(0);
+                /*recognition = updatedRecognitions.get(0);
 
                 for (Recognition r : updatedRecognitions) {
                     // find the most likely recognition.
                     if (r.getConfidence() > recognition.getConfidence())
-                        r = recognition;
+                        recognition = r;
                 }
 
                 telemetry.addData("Label", recognition.getLabel());
@@ -160,7 +163,7 @@ public class Auto extends LinearOpMode {
                 telemetry.addData("Single", recognition.getLabel().equalsIgnoreCase("Single"));
                 telemetry.addData("Quad", recognition.getLabel().equalsIgnoreCase("Quad"));
 
-                telemetry.update();
+                telemetry.update();*/
             }
         }
 
@@ -174,7 +177,10 @@ public class Auto extends LinearOpMode {
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
 
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
-        parameters.cameraName = hardwareMap.get(WebcamName.class, "Webcam 1");
+        // using an external USB webcam
+        //parameters.cameraName = hardwareMap.get(WebcamName.class, "Webcam 1");
+        // using the cell phone's rear-facing camera
+        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
 
         //  Instantiate the Vuforia engine
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
