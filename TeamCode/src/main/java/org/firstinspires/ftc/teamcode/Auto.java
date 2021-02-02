@@ -111,11 +111,24 @@ public class Auto extends LinearOpMode {
         waitForStart();
 
         if (opModeIsActive()) {
-            while (opModeIsActive()) {
-                /*telemetry.addData("I see", tfodLook().label);
-                telemetry.update();*/
-                tfodLook();
+            // get in front of the rings.
+
+            // look at the Starter Stack
+            TfodView view = tfodLook();
+            switch (view) {
+                case NOTHING:
+                    telemetry.addLine("now I shall go to zone A!");
+                    break;
+                case SINGLE:
+                    telemetry.addLine("now I shall go to zone B!");
+                    break;
+                case QUAD:
+                    telemetry.addLine("now I shall go to zone C!");
+                    break;
             }
+            telemetry.update();
+
+            //
 
             /*
             // drive up to the line
@@ -146,24 +159,22 @@ public class Auto extends LinearOpMode {
         if (tfod != null) {
             List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
             if (updatedRecognitions != null) {
-                telemetry.addData("asdf","jkl;");
-                telemetry.update();
                 telemetry.addData("# Object Detected", updatedRecognitions.size());
 
-                /*recognition = updatedRecognitions.get(0);
+                if (updatedRecognitions.size() > 0) {
+                    recognition = updatedRecognitions.get(0);
 
-                for (Recognition r : updatedRecognitions) {
-                    // find the most likely recognition.
-                    if (r.getConfidence() > recognition.getConfidence())
-                        recognition = r;
+                    for (Recognition r : updatedRecognitions) {
+                        // find the most likely recognition.
+                        if (r.getConfidence() > recognition.getConfidence())
+                            recognition = r;
+                    }
+
+                    if (recognition.getLabel().equalsIgnoreCase("Single"))
+                        return TfodView.SINGLE;
+                    else if (recognition.getLabel().equalsIgnoreCase("Quad"))
+                        return TfodView.QUAD;
                 }
-
-                telemetry.addData("Label", recognition.getLabel());
-                telemetry.addData("Confidence", recognition.getConfidence());
-                telemetry.addData("Single", recognition.getLabel().equalsIgnoreCase("Single"));
-                telemetry.addData("Quad", recognition.getLabel().equalsIgnoreCase("Quad"));
-
-                telemetry.update();*/
             }
         }
 
