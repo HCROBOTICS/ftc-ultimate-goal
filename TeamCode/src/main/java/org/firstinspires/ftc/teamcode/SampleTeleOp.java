@@ -24,7 +24,7 @@ public class SampleTeleOp extends LinearOpMode {
     DcMotor rlaunch;
     DcMotor convey;
     CRServo LinearSlide;
-    CRServo arm;
+    Servo arm;
     Servo gripper;
     Servo ramp;
 
@@ -60,13 +60,13 @@ public class SampleTeleOp extends LinearOpMode {
         gripper = hardwareMap.servo.get("gripper");
         ramp = hardwareMap.servo.get("ramp");
         LinearSlide = hardwareMap.crservo.get("windmill");
-        arm = hardwareMap.crservo.get("arm");
+        arm = hardwareMap.servo.get("arm");
 
         // TODO:z when builders figure out what direction motors are on.
         llaunch.setDirection(DcMotor.Direction.FORWARD);
         rlaunch.setDirection(DcMotor.Direction.FORWARD);
         convey.setDirection(DcMotor.Direction.REVERSE);
-        arm.setDirection(DcMotor.Direction.REVERSE);
+        arm.setDirection(Servo.Direction.REVERSE);
         LinearSlide.setDirection(DcMotorSimple.Direction.FORWARD);
 
 
@@ -105,12 +105,12 @@ public class SampleTeleOp extends LinearOpMode {
 
             convey.setPower(gamepad2.left_trigger);
             LinearSlide.setPower(gamepad1.left_trigger);
-            arm.setPower(gamepad2.right_stick_y);
+            arm.setPosition(8 * gamepad2.right_stick_y);
 
             // TODO: add if statements to constrain these things
 
             gripper.setPosition(gamepad1.right_trigger);
-            ramp.setPosition(gamepad1.right_bumper? 1:0);
+            ramp.setPosition(gamepad1.right_bumper? .5:0);
 
 
         }
