@@ -104,12 +104,13 @@ public class SampleTeleOp extends LinearOpMode {
             rlaunch.setPower(launch);
 
             convey.setPower(gamepad2.left_trigger);
-            LinearSlide.setPower(gamepad2.left_trigger);
-            arm.setPower(gamepad2.right_stick_x);
+            LinearSlide.setPower(gamepad1.left_trigger);
+            arm.setPower(gamepad2.right_stick_y);
 
             // TODO: add if statements to constrain these things
-            gripper.setPosition(1);
-            ramp.setPosition(1);
+
+            gripper.setPosition(gamepad1.right_trigger);
+            ramp.setPosition(gamepad1.right_bumper? 1:0);
 
 
         }
