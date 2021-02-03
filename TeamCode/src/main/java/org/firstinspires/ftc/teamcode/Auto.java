@@ -48,6 +48,7 @@ public class Auto extends LinearOpMode {
     private static final String TFOD_MODEL_ASSET = "UltimateGoal.tflite";
     private static final String LABEL_FIRST_ELEMENT = "Quad";
     private static final String LABEL_SECOND_ELEMENT = "Single";
+    private static final int MILLISECONDS_PER_SQUARE = 1080;
 
     enum TfodView {
         NOTHING("Nothing"), SINGLE("Single"), QUAD("Quad");
@@ -67,7 +68,6 @@ public class Auto extends LinearOpMode {
 
     private VuforiaLocalizer vuforia;
     private TFObjectDetector tfod;
-
     DcMotor lf;
     DcMotor rf;
     DcMotor lb;
@@ -110,43 +110,78 @@ public class Auto extends LinearOpMode {
         telemetry.update();
         waitForStart();
 
-        if (opModeIsActive()) {
+        TfodView view = TfodView.NOTHING;
+
+        /* Get in position to drop the wobble goal */
+        while (opModeIsActive()) { // I made this a loop just so I can break out of it at any time.
             // get in front of the rings.
+            // TODO: turn right
+            goForwards(.5);
+            // TODO: turn left
+
+            sleep(500);
 
             // look at the Starter Stack
-            TfodView view = tfodLook();
-            switch (view) {
-                case NOTHING:
-                    telemetry.addLine("now I shall go to zone A!");
-                    break;
-                case SINGLE:
-                    telemetry.addLine("now I shall go to zone B!");
-                    break;
-                case QUAD:
-                    telemetry.addLine("now I shall go to zone C!");
-                    break;
-            }
-            telemetry.update();
+            view = tfodLook();
 
-            //
+            /* en route to Zone A */
+            // TODO: turn left
+            goForwards(1);
+            // TODO: turn right
+            goForwards(2);
+            if (view == TfodView.NOTHING)
+                break;
 
-            /*
-            // drive up to the line
-            forwards(.5);
-            sleep(3250);
-            stopMotors();
+            /* en route to Zone B */
+            // TODO: turn right
+            goForwards(1);
+            // TODO: turn left
+            goForwards(1);
+            if (view == TfodView.SINGLE)
+                break;
 
-            // spin up the launcher
-            powerLaunch(1);
-            sleep(3000);
-            // spin up the conveyor thing
-            powerConvey(1);
-            sleep(5000);
-
-            // stop everything
-            powerLaunch(0);
-            powerConvey(0); */
+            /* en route to Zone C */
+            goForwards(1);
+            // TODO: turn left
+            goForwards(1);
+            // TODO: turn right
         }
+
+        // TODO: drop the wobble goal.
+
+        if (view == TfodView.NOTHING) {
+            //TODO: turn right
+            goForwards(1);
+            //TODO: turn left
+        }
+        else if (view == TfodView.SINGLE) {
+            goBackwards(1);
+        }
+        else {
+            goBackwards(2);
+            //TODO: turn Right
+            goForwards(1);
+            //TODO: turn Left
+        }
+
+
+        /*
+        // drive up to the line
+        forwards(.5);
+        sleep(3250);
+        stopMotors();
+
+        // spin up the launcher
+        powerLaunch(1);
+        sleep(3000);
+        // spin up the conveyor thing
+        powerConvey(1);
+        sleep(5000);
+
+        // stop everything
+        powerLaunch(0);
+        powerConvey(0);
+        */
 
         if (tfod != null) {
             tfod.shutdown();
@@ -213,6 +248,18 @@ public class Auto extends LinearOpMode {
         rf.setPower(power);
         lb.setPower(power);
         rb.setPower(power);
+    }
+
+    void goForwards(double squares) {
+        forwards(.5);
+        sleep((int)(squares * MILLISECONDS_PER_SQUARE));
+        stopMotors();
+    }
+
+    void goBackwards(double squares) {
+        forwards(-.5);
+        sleep((int)(squares * MILLISECONDS_PER_SQUARE));
+        stopMotors();
     }
 
     void turnRight(double power) {
