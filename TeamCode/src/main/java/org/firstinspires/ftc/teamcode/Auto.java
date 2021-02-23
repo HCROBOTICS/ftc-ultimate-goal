@@ -31,11 +31,10 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
 import java.util.List;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
@@ -48,7 +47,7 @@ public class Auto extends LinearOpMode {
     private static final String TFOD_MODEL_ASSET = "UltimateGoal.tflite";
     private static final String LABEL_FIRST_ELEMENT = "Quad";
     private static final String LABEL_SECOND_ELEMENT = "Single";
-    private static final int MILLISECONDS_PER_SQUARE = 1080;
+    private static final int TICKS_PER_SQUARE = 1080;
 
     enum TfodView {
         NOTHING("Nothing"), SINGLE("Single"), QUAD("Quad");
@@ -224,9 +223,9 @@ public class Auto extends LinearOpMode {
 
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
         // using an external USB webcam
-        //parameters.cameraName = hardwareMap.get(WebcamName.class, "Webcam 1");
+        parameters.cameraName = hardwareMap.get(WebcamName.class, "Webcam 1");
         // using the cell phone's rear-facing camera
-        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
+        //parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
 
         //  Instantiate the Vuforia engine
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
@@ -251,14 +250,15 @@ public class Auto extends LinearOpMode {
     }
 
     void goForwards(double squares) {
+        resetEncoders();
         forwards(.5);
-        sleep((int)(squares * MILLISECONDS_PER_SQUARE));
+        while (GetEncodersForward() < squares * TICKS_PER_SQUARE);
         stopMotors();
     }
 
     void goBackwards(double squares) {
         forwards(-.5);
-        sleep((int)(squares * MILLISECONDS_PER_SQUARE));
+        sleep((int)(squares * TICKS_PER_SQUARE));
         stopMotors();
     }
 
@@ -290,5 +290,27 @@ public class Auto extends LinearOpMode {
 
     void powerConvey(double power) {
         convey.setPower(power);
+    }
+
+    void resetEncoders() {
+        lf.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rf.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        lf.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rf.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        lb.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rb.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+
+    int GetEncodersForward (){
+        int avg = 0;
+        avg += lf.getCurrentPosition();
+        avg += lb.getCurrentPosition();
+        avg += rf.getCurrentPosition();
+        avg += rb.getCurrentPosition();
+        avg /= 4;
+        return avg;
     }
 }
