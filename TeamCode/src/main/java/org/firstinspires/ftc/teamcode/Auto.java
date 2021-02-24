@@ -47,7 +47,9 @@ public class Auto extends LinearOpMode {
     private static final String TFOD_MODEL_ASSET = "UltimateGoal.tflite";
     private static final String LABEL_FIRST_ELEMENT = "Quad";
     private static final String LABEL_SECOND_ELEMENT = "Single";
-    private static final int TICKS_PER_SQUARE = 1080;
+    private static final int TICKS_PER_TURN = 1676;
+    private static final int TICKS_PER_SQUARE = 3327;
+
 
     enum TfodView {
         NOTHING("Nothing"), SINGLE("Single"), QUAD("Quad");
@@ -114,9 +116,9 @@ public class Auto extends LinearOpMode {
         /* Get in position to drop the wobble goal */
         while (opModeIsActive()) { // I made this a loop just so I can break out of it at any time.
             // get in front of the rings.
-            // TODO: turn right
+            rotateRight();
             goForwards(.5);
-            // TODO: turn left
+            rotateLeft();
 
             sleep(500);
 
@@ -124,43 +126,43 @@ public class Auto extends LinearOpMode {
             view = tfodLook();
 
             /* en route to Zone A */
-            // TODO: turn left
+            rotateLeft();
             goForwards(1);
-            // TODO: turn right
+            rotateRight();
             goForwards(2);
             if (view == TfodView.NOTHING)
                 break;
 
             /* en route to Zone B */
-            // TODO: turn right
+            rotateRight();
             goForwards(1);
-            // TODO: turn left
+            rotateLeft();
             goForwards(1);
             if (view == TfodView.SINGLE)
                 break;
 
             /* en route to Zone C */
             goForwards(1);
-            // TODO: turn left
+            rotateLeft();
             goForwards(1);
-            // TODO: turn right
+            rotateRight();
         }
 
         // TODO: drop the wobble goal.
 
         if (view == TfodView.NOTHING) {
-            //TODO: turn right
+            rotateRight();
             goForwards(1);
-            //TODO: turn left
+            rotateLeft();
         }
         else if (view == TfodView.SINGLE) {
             goBackwards(1);
         }
         else {
             goBackwards(2);
-            //TODO: turn Right
+            rotateRight();
             goForwards(1);
-            //TODO: turn Left
+            rotateLeft();
         }
 
 
@@ -257,8 +259,23 @@ public class Auto extends LinearOpMode {
     }
 
     void goBackwards(double squares) {
+        resetEncoders();
         forwards(-.5);
-        sleep((int)(squares * TICKS_PER_SQUARE));
+        while (GetEncodersForward() < squares * TICKS_PER_SQUARE);
+        stopMotors();
+    }
+
+    void rotateRight() {
+        resetEncoders();
+        turnRight(1);
+        while (GetEncodersForward() < TICKS_PER_TURN);
+        stopMotors();
+    }
+
+    void rotateLeft() {
+        resetEncoders();
+        turnLeft(1);
+        while (GetEncodersForward() < TICKS_PER_TURN);
         stopMotors();
     }
 
