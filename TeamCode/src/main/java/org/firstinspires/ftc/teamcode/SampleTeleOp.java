@@ -24,10 +24,10 @@ public class SampleTeleOp extends LinearOpMode {
     DcMotor rlaunch;
     DcMotor convey1;
     DcMotor convey2;
-    CRServo LinearSlide;
+    //CRServo LinearSlide;
     Servo arm;
     Servo gripper;
-    Servo ramp;
+    CRServo collector;
 
     // Unused for now
     //DcMotor extendo;
@@ -37,7 +37,7 @@ public class SampleTeleOp extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         waitForStart();
 
-        telemetry.addData("", " The Code does not work");
+        telemetry.addData("", " The Code perhaps works");
         telemetry.update();
 
         lf = hardwareMap.dcMotor.get("lf");
@@ -60,8 +60,8 @@ public class SampleTeleOp extends LinearOpMode {
         convey1 = hardwareMap.dcMotor.get("convey1");
         convey2 = hardwareMap.dcMotor.get("convey2");
         gripper = hardwareMap.servo.get("gripper");
-        ramp = hardwareMap.servo.get("ramp");
-        LinearSlide = hardwareMap.crservo.get("windmill");
+        collector = hardwareMap.crservo.get("collector");
+        //LinearSlide = hardwareMap.crservo.get("windmill");
         arm = hardwareMap.servo.get("arm");
 
         // TODO:z when builders figure out what direction motors are on.
@@ -70,7 +70,7 @@ public class SampleTeleOp extends LinearOpMode {
         convey1.setDirection(DcMotor.Direction.REVERSE);
         convey2.setDirection(DcMotor.Direction.FORWARD);
         arm.setDirection(Servo.Direction.REVERSE);
-        LinearSlide.setDirection(DcMotorSimple.Direction.FORWARD);
+        //LinearSlide.setDirection(DcMotorSimple.Direction.FORWARD);
 
 
         llaunch.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -110,13 +110,13 @@ public class SampleTeleOp extends LinearOpMode {
             convey1.setPower(conveypowa);
             convey2.setPower(conveypowa);
 
-            LinearSlide.setPower(gamepad1.left_trigger);
+            //LinearSlide.setPower(gamepad1.left_trigger);
             arm.setPosition((gamepad2.right_stick_y));
 
             // TODO: add if statements to constrain these things
 
             gripper.setPosition(gamepad2.dpad_up? 1:0);
-            ramp.setPosition(gamepad1.right_bumper? .5:0);
+            collector.setPower(gamepad1.left_trigger);
 
 
         }
