@@ -39,7 +39,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 
 
 @Autonomous(name = "Autonomous", group = "yep")
@@ -47,7 +50,7 @@ public class Auto extends LinearOpMode {
     private static final String TFOD_MODEL_ASSET = "UltimateGoal.tflite";
     private static final String LABEL_FIRST_ELEMENT = "Quad";
     private static final String LABEL_SECOND_ELEMENT = "Single";
-    private static final int TICKS_PER_TURN = 1676;
+    private static final int TICKS_PER_TURN = 800;
     private static final int TICKS_PER_SQUARE = 3327;
 
 
@@ -76,7 +79,9 @@ public class Auto extends LinearOpMode {
 
     DcMotor llaunch;
     DcMotor rlaunch;
-    DcMotor convey;
+    //DcMotor convey;
+    Servo gripper;
+    CRServo arm;
 
     @Override
     public void runOpMode() {
@@ -85,13 +90,15 @@ public class Auto extends LinearOpMode {
         initVuforia();
         initTfod();
 
-        /* lf = hardwareMap.dcMotor.get("lf");
+        lf = hardwareMap.dcMotor.get("lf");
         rf = hardwareMap.dcMotor.get("rf");
         lb = hardwareMap.dcMotor.get("lb");
         rb = hardwareMap.dcMotor.get("rb");
         llaunch = hardwareMap.dcMotor.get("llaunch");
         rlaunch = hardwareMap.dcMotor.get("rlaunch");
-        convey = hardwareMap.dcMotor.get("convey");
+        //convey = hardwareMap.dcMotor.get("convey");
+        gripper = hardwareMap.servo.get("gripper");
+        arm = hardwareMap.crservo.get("arm");
 
         lf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -101,7 +108,10 @@ public class Auto extends LinearOpMode {
         rlaunch.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         rf.setDirection(DcMotor.Direction.REVERSE);
-        rb.setDirection(DcMotor.Direction.REVERSE); */
+        rb.setDirection(DcMotor.Direction.REVERSE);
+        arm.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        gripper.setPosition(.85);
 
         if (tfod != null) {
             tfod.activate();
@@ -111,11 +121,29 @@ public class Auto extends LinearOpMode {
         telemetry.update();
         waitForStart();
 
+        // drive up to the line
+        resetEncoders();
+        forwards(-.5);
+        while (GetEncodersForward() < 9800);
+        stopMotors();
+        sleep(500);
+
+        rotateRight();
+        goForwards(.5);
+        //sleep(1000);
+        arm.setPower(1);
+        sleep(1250);
+        arm.setPower(0);
+        gripper.setPosition(.25);
+        sleep(500);
+        goBackwards(.5);
+        rotateLeft();
+
         TfodView view = TfodView.NOTHING;
 
         /* Get in position to drop the wobble goal */
         while (opModeIsActive()) { // I made this a loop just so I can break out of it at any time.
-            // get in front of the rings.
+        /*  // get in front of the rings.
             rotateRight();
             goForwards(.5);
             rotateLeft();
@@ -125,7 +153,7 @@ public class Auto extends LinearOpMode {
             // look at the Starter Stack
             view = tfodLook();
 
-            /* en route to Zone A */
+            // en route to Zone A
             rotateLeft();
             goForwards(1);
             rotateRight();
@@ -133,7 +161,7 @@ public class Auto extends LinearOpMode {
             if (view == TfodView.NOTHING)
                 break;
 
-            /* en route to Zone B */
+            // en route to Zone B
             rotateRight();
             goForwards(1);
             rotateLeft();
@@ -141,14 +169,16 @@ public class Auto extends LinearOpMode {
             if (view == TfodView.SINGLE)
                 break;
 
-            /* en route to Zone C */
+            // en route to Zone C
             goForwards(1);
             rotateLeft();
             goForwards(1);
             rotateRight();
+
+        */
         }
 
-        // TODO: drop the wobble goal.
+        /*  // TODO: drop the wobble goal.
 
         if (view == TfodView.NOTHING) {
             rotateRight();
@@ -165,14 +195,10 @@ public class Auto extends LinearOpMode {
             rotateLeft();
         }
 
+         */
 
-        /*
-        // drive up to the line
-        forwards(.5);
-        sleep(3250);
-        stopMotors();
 
-        // spin up the launcher
+    /*  // spin up the launcher
         powerLaunch(1);
         sleep(3000);
         // spin up the conveyor thing
@@ -182,7 +208,7 @@ public class Auto extends LinearOpMode {
         // stop everything
         powerLaunch(0);
         powerConvey(0);
-        */
+     */
 
         if (tfod != null) {
             tfod.shutdown();
@@ -253,30 +279,34 @@ public class Auto extends LinearOpMode {
 
     void goForwards(double squares) {
         resetEncoders();
-        forwards(.5);
+        forwards(-.5);
         while (GetEncodersForward() < squares * TICKS_PER_SQUARE);
         stopMotors();
+        sleep(500);
     }
 
     void goBackwards(double squares) {
         resetEncoders();
-        forwards(-.5);
+        forwards(.5);
         while (GetEncodersForward() < squares * TICKS_PER_SQUARE);
         stopMotors();
+        sleep(500);
     }
 
     void rotateRight() {
         resetEncoders();
-        turnRight(1);
+        turnRight(.5);
         while (GetEncodersForward() < TICKS_PER_TURN);
         stopMotors();
+        sleep(500);
     }
 
     void rotateLeft() {
         resetEncoders();
-        turnLeft(1);
+        turnLeft(.5);
         while (GetEncodersForward() < TICKS_PER_TURN);
         stopMotors();
+        sleep(500);
     }
 
     void turnRight(double power) {
@@ -306,7 +336,7 @@ public class Auto extends LinearOpMode {
     }
 
     void powerConvey(double power) {
-        convey.setPower(power);
+        //convey.setPower(power);
     }
 
     void resetEncoders() {
@@ -323,10 +353,10 @@ public class Auto extends LinearOpMode {
 
     int GetEncodersForward (){
         int avg = 0;
-        avg += lf.getCurrentPosition();
-        avg += lb.getCurrentPosition();
-        avg += rf.getCurrentPosition();
-        avg += rb.getCurrentPosition();
+        avg += Math.abs(lf.getCurrentPosition());
+        avg += Math.abs(lb.getCurrentPosition());
+        avg += Math.abs(rf.getCurrentPosition());
+        avg += Math.abs(rb.getCurrentPosition());
         avg /= 4;
         return avg;
     }

@@ -25,7 +25,7 @@ public class SampleTeleOp extends LinearOpMode {
     DcMotor convey1;
     DcMotor convey2;
     //CRServo LinearSlide;
-    Servo arm;
+    CRServo arm;
     Servo gripper;
     CRServo collector;
 
@@ -57,21 +57,20 @@ public class SampleTeleOp extends LinearOpMode {
 
         llaunch = hardwareMap.dcMotor.get("llaunch");
         rlaunch = hardwareMap.dcMotor.get("rlaunch");
-        convey1 = hardwareMap.dcMotor.get("convey1");
-        convey2 = hardwareMap.dcMotor.get("convey2");
+        convey1 = hardwareMap.dcMotor.get("lconvey");
+        convey2 = hardwareMap.dcMotor.get("rconvey");
         gripper = hardwareMap.servo.get("gripper");
-        collector = hardwareMap.crservo.get("collector");
+        collector = hardwareMap.crservo.get("windmill");
         //LinearSlide = hardwareMap.crservo.get("windmill");
-        arm = hardwareMap.servo.get("arm");
+        arm = hardwareMap.crservo.get("arm");
 
         // TODO:z when builders figure out what direction motors are on.
-        llaunch.setDirection(DcMotor.Direction.FORWARD);
-        rlaunch.setDirection(DcMotor.Direction.FORWARD);
+        llaunch.setDirection(DcMotor.Direction.REVERSE);
+        rlaunch.setDirection(DcMotor.Direction.REVERSE);
         convey1.setDirection(DcMotor.Direction.REVERSE);
         convey2.setDirection(DcMotor.Direction.FORWARD);
-        arm.setDirection(Servo.Direction.REVERSE);
-        //LinearSlide.setDirection(DcMotorSimple.Direction.FORWARD);
-
+        arm.setDirection(DcMotorSimple.Direction.REVERSE);
+        collector.setDirection(DcMotorSimple.Direction.FORWARD);
 
         llaunch.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rlaunch.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -111,14 +110,15 @@ public class SampleTeleOp extends LinearOpMode {
             convey2.setPower(conveypowa);
 
             //LinearSlide.setPower(gamepad1.left_trigger);
-            arm.setPosition((gamepad2.right_stick_y));
-
+            arm.setPower((gamepad1.dpad_up? 1:0) - (gamepad1.dpad_down? 1:0));
+            //arm.setPosition(1 - Math.abs(gamepad1.right_trigger));
             // TODO: add if statements to constrain these things
 
-            gripper.setPosition(gamepad2.dpad_up? 1:0);
-            collector.setPower(gamepad1.left_trigger);
+            gripper.setPosition(gamepad1.right_bumper? .25:.85);
+            telemetry.addData("arm", gripper.getPosition());
+            collector.setPower((gamepad2.right_bumper? 1:0) - (gamepad2.left_bumper? 1:0));
 
-
+            telemetry.update();
         }
     }
 
